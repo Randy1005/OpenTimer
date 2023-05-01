@@ -99,7 +99,12 @@ class Timer {
     void dump_verilog(std::ostream&, const std::string&) const;
     void dump_spef(std::ostream&) const;
     void dump_rctree(std::ostream&) const;
-    
+   
+    // dumps the incremental graph operations
+    // e.g. insert_edge, insert_vertex, remove_edge, etc.
+    void dump_graph_ops(std::ostream&, size_t, size_t) const;
+
+
     inline auto num_primary_inputs() const;
     inline auto num_primary_outputs() const;
     inline auto num_pins() const;

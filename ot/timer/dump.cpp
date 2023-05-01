@@ -2,6 +2,44 @@
 
 namespace ot {
 
+
+void Timer::dump_graph_ops(
+  std::ostream& os, 
+  size_t report_interval,
+  size_t K) const {
+  
+  size_t op_cnt = 0;
+  for (const auto& arc : _arcs) {
+    
+    bool has_weights = false;
+    FOR_EACH_EL_RF_RF_IF(el, irf, orf, arc._delay[el][irf][orf]) {
+      has_weights = true;
+    }
+    if (!has_weights) {
+      continue;
+    }
+    os << "insert_edge ";
+    os << arc._from._name << ' ' << arc._to._name << ' ';
+    FOR_EACH_EL_RF_RF(el, irf, orf) {
+      if (arc._delay[el][irf][orf]) {
+        os << *arc._delay[el][irf][orf] << ' ';
+      }
+      else {
+        os << "n/a ";
+      }
+    }
+    os << '\n';
+
+    if (op_cnt % report_interval == 0) {
+      os << "report " << K << '\n'; 
+    }
+    op_cnt++;
+  }
+
+
+}
+
+
 // Function: dump_graph
 void Timer::dump_graph(std::ostream& os) const {
   std::shared_lock lock(_mutex);
