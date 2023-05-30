@@ -6,7 +6,9 @@ namespace ot {
 void Timer::dump_graph_ops(
   std::ostream& os, 
   size_t report_interval,
-  size_t K) const {
+  size_t K,
+  bool gen_update,
+  size_t update_interval) const {
   
   size_t op_cnt = 0;
   for (const auto& arc : _arcs) {
@@ -30,9 +32,29 @@ void Timer::dump_graph_ops(
     }
     os << '\n';
 
+    
     if (op_cnt % report_interval == 0) {
       os << "report " << K << '\n'; 
     }
+    
+    // output an update operation + report
+    if (gen_update && op_cnt % update_interval == 0) {
+      os << "insert_edge ";
+      os << arc._from._name << ' ' << arc._to._name << ' ';
+      FOR_EACH_EL_RF_RF(el, irf, orf) {
+        if (arc._delay[el][irf][orf]) {
+          os << *arc._delay[el][irf][orf] - 0.05f << ' ';
+        }
+        else {
+          os << "n/a ";
+        }
+      }
+      os << '\n';
+      os << "report " << K << '\n'; 
+    }
+
+
+
     op_cnt++;
   }
 

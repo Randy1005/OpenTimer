@@ -102,7 +102,12 @@ class Timer {
    
     // dumps the incremental graph operations
     // e.g. insert_edge, insert_vertex, remove_edge, etc.
-    void dump_graph_ops(std::ostream&, size_t, size_t) const;
+    void dump_graph_ops(
+      std::ostream&, 
+      size_t, 
+      size_t, 
+      bool = false, 
+      size_t = 0) const;
 
 
     inline auto num_primary_inputs() const;
