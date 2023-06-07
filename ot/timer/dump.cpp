@@ -62,6 +62,31 @@ void Timer::dump_graph_ops(
 }
 
 
+void Timer::dump_edge_insertions(std::ostream& os) const {
+  for (const auto& arc : _arcs) {
+    bool has_weights = false;
+    FOR_EACH_EL_RF_RF_IF(el, irf, orf, arc._delay[el][irf][orf]) {
+      has_weights = true;
+    }
+    if (!has_weights) {
+      continue;
+    }
+    os << "insert_edge ";
+    os << arc._from._name << ' ' << arc._to._name << ' ';
+    FOR_EACH_EL_RF_RF(el, irf, orf) {
+      if (arc._delay[el][irf][orf]) {
+        os << *arc._delay[el][irf][orf] << ' ';
+      }
+      else {
+        os << "n/a ";
+      }
+    }
+    os << '\n';
+
+  }
+
+}
+
 // Function: dump_graph
 void Timer::dump_graph(std::ostream& os) const {
   std::shared_lock lock(_mutex);

@@ -109,6 +109,7 @@ class Timer {
       bool = false, 
       size_t = 0) const;
 
+    void dump_edge_insertions(std::ostream& os) const;
 
     inline auto num_primary_inputs() const;
     inline auto num_primary_outputs() const;
