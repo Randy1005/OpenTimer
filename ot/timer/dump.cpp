@@ -87,6 +87,44 @@ void Timer::dump_edge_insertions(std::ostream& os) const {
 
 }
 
+
+void Timer::dump_connections(std::ostream& os, size_t max_connections) const {
+  for (const auto& [name, pin] : _pins) {
+    if (pin.num_fanins() + pin.num_fanouts() <= max_connections) {
+      os << "# pin name: " << name << "\n";
+      for (auto arc : pin._fanin) {
+        os << "insert_edge " << arc->_from._name << ' ' << arc->_to._name << ' ';
+        FOR_EACH_EL_RF_RF(el, irf, orf) {
+          if (arc->_delay[el][irf][orf]) {
+            os << *arc->_delay[el][irf][orf] << ' ';
+          }
+          else {
+            os << "n/a ";
+          }
+        }
+        os << '\n';
+      }
+      
+      for (auto arc : pin._fanout) {
+        os << "insert_edge " << arc->_from._name << ' ' << arc->_to._name << ' ';
+        FOR_EACH_EL_RF_RF(el, irf, orf) {
+          if (arc->_delay[el][irf][orf]) {
+            os << *arc->_delay[el][irf][orf] << ' ';
+          }
+          else {
+            os << "n/a ";
+          }
+        }
+        os << '\n';
+      }
+
+    }
+
+  }
+
+}
+
+
 // Function: dump_graph
 void Timer::dump_graph(std::ostream& os) const {
   std::shared_lock lock(_mutex);

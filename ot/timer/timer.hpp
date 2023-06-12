@@ -111,6 +111,8 @@ class Timer {
 
     void dump_edge_insertions(std::ostream& os) const;
 
+    void dump_connections(std::ostream& os, size_t max_connections) const;
+
     inline auto num_primary_inputs() const;
     inline auto num_primary_outputs() const;
     inline auto num_pins() const;
